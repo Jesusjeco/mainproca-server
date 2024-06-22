@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "start:prod": "node ./bin/www",
+    "serve": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "build": "npm install && echo 'Build complete.'"
   },
   "dependencies": {
