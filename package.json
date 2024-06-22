@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "build": "npm i && nodemon ./bin/www"
+    "start:prod": "node ./bin/www",
+    "build": "npm install"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
