@@ -40,7 +40,6 @@ const createProduct = async (req, res) => {
     const newProduct = new Product(req.body);
     // Save the document
     const savedProduct = await newProduct.save();
-    console.log('Document saved:', savedProduct);
 
     res.status(201).send('Test product name saved successfully');
   } catch (err) {
