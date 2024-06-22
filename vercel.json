@@ -8,9 +8,5 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "scripts": {
-    "build": "npm install && npm run build",
-    "start": "node bin/www"
   }
 }
