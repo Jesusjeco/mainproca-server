@@ -51,7 +51,6 @@ const createProduct = async (req, res) => {
 const updateProduct = async function (req, res, next) {
   try {
     const { id } = req.params;
-    console.log("Id a buscar: "+id);
 
     const productToupdate = await Product.findByIdAndUpdate(id, req.body);
     if (!productToupdate) {
