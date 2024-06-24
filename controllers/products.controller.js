@@ -51,7 +51,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async function (req, res, next) {
   try {
     const { id } = req.params;
-
+    
     const productToupdate = await Product.findByIdAndUpdate(id, req.body);
     if (!productToupdate) {
       res.status(404).send('Document not found by ID');
