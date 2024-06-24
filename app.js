@@ -5,11 +5,12 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var productsRouter = require('./routes/product');
+var productsRouter = require('./routes/products');
+var clientsRouter = require('./routes/clients');
 var mongooseRouter = require("./routes/mongoose");
 
 //Using cors to avois CORS restrictions during an API call
-const cors = require('cors'); 
+const cors = require('cors');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/clients', clientsRouter);
 app.use('/api/mongoose', mongooseRouter);
 
 module.exports = app;
