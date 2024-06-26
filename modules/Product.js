@@ -11,6 +11,12 @@ const productSchema = new mongoose.Schema({
     min: [0, 'Quantity cannot be less than 0'],
     default: 0 // Default value
   },
+  price: {
+    type: Number,
+    required: true,
+    min: [0, 'Quantity cannot be less than 0'],
+    default: 0 // Default value
+  },
   description: {
     type: String,
   }

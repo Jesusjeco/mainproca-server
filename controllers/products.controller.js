@@ -3,10 +3,6 @@ const Product = require('../modules/Product');
 const getAllProducts = async (req, res, next) => {
   try {
     const productsList = await Product.find({}).sort({ name: 1 });
-    //res.status(200).send('List of all the products');
-
-    // if (productsList.length === 0)
-    //   return res.send('Product list empty');
 
     res.status(200).json(productsList);
     //console.log(productsList);

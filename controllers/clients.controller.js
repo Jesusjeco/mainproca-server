@@ -3,10 +3,6 @@ const Client = require('../modules/Client');
 const getAllClients = async (req, res, next) => {
   try {
     const clientsList = await Client.find({}).sort({ name: 1 });
-    //res.status(200).send('List of all the clients');
-
-    // if (clientsList.length === 0)
-    //   return res.send('Client list empty');
 
     res.status(200).json(clientsList);
     //console.log(clientsList);
