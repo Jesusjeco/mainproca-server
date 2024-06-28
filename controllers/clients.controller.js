@@ -83,6 +83,34 @@ const deleteClient = async (req, res) => {
   }
 }
 
+const getClientsIdsAndNames = async (req, res, next) => {
+  console.log("getClientsNamesById route");
+  try {
+    // Extract clientIds from request body or query parameters
+    const clientIds = req.body.clientIds || [];
+
+    // Fetch clients from MongoDB using Mongoose
+    const clients = await Client.find({ _id: { $in: clientIds } });
+
+    // Check if any clients were found
+    if (!clients || clients.length === 0) {
+      return res.status(404).json({ error: 'Clients not found' });
+    }
+
+    // Prepare response with IDs and names
+    const clientsWithIdsAndNames = clients.map(client => ({
+      id: client._id,
+      name: client.name
+    }));
+
+    // Send JSON response with clients' IDs and names
+    res.status(200).json(clientsWithIdsAndNames);
+  } catch (err) {
+    console.error('Error fetching clients by IDs:', err);
+    res.status(500).send('Error fetching clients by IDs');
+  }
+}
+
 module.exports = {
-  getAllClients, getClientById, createClient, updateClient, deleteClient
+  getAllClients, getClientById, createClient, updateClient, deleteClient, getClientsIdsAndNames
 }
