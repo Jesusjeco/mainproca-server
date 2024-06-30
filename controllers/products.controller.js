@@ -15,13 +15,13 @@ const getAllProducts = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
   try {
     const productById = await Product.findById(req.params.id);
-    
+
     if (!productById) {
       // If no product is found, send a 404 status and error message
       console.log("Error 404 detected");
       return res.status(404).json({ error: 'Product not found' });
     }
-    
+
     res.status(200).json(productById);
     //console.log(productById);
   } catch (err) {
@@ -47,7 +47,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async function (req, res, next) {
   try {
     const { id } = req.params;
-    
+
     const productToupdate = await Product.findByIdAndUpdate(id, req.body);
     if (!productToupdate) {
       res.status(404).send('Document not found by ID');
@@ -80,6 +80,34 @@ const deleteProduct = async (req, res) => {
   }
 }
 
+const getProductsIdsAndNames = async (req, res, next) => {
+  console.log("getProductsNamesById route");
+  try {
+    // Extract productIds from request body or query parameters
+    const productIds = req.body.productIds || [];
+
+    // Fetch products from MongoDB using Mongoose
+    const products = await Product.find({ _id: { $in: productIds } });
+
+    // Check if any products were found
+    if (!products || products.length === 0) {
+      return res.status(404).json({ error: 'Products not found' });
+    }
+
+    // Prepare response with IDs and names
+    const productsWithIdsAndNames = products.map(product => ({
+      id: product._id,
+      name: product.name
+    }));
+
+    // Send JSON response with products' IDs and names
+    res.status(200).json(productsWithIdsAndNames);
+  } catch (err) {
+    console.error('Error fetching products by IDs:', err);
+    res.status(500).send('Error fetching products by IDs');
+  }
+}
+
 module.exports = {
-  getAllProducts, getProductById, createProduct, updateProduct, deleteProduct
+  getAllProducts, getProductById, createProduct, updateProduct, deleteProduct, getProductsIdsAndNames
 }
