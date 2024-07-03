@@ -1,6 +1,6 @@
 const Product = require('../modules/Product');
 
-const getAllProducts = async (req, res, next) => {
+const getAllProducts = async (req,res) => {
   try {
     const productsList = await Product.find({}).sort({ name: 1 });
 
@@ -12,7 +12,7 @@ const getAllProducts = async (req, res, next) => {
   }
 }//getAllProducts
 
-const getProductById = async (req, res, next) => {
+const getProductById = async (req, res) => {
   try {
     const productById = await Product.findById(req.params.id);
 
@@ -44,7 +44,7 @@ const createProduct = async (req, res) => {
   }
 }
 
-const updateProduct = async function (req, res, next) {
+const updateProduct = async function (req, res) {
   try {
     const { id } = req.params;
 
@@ -80,7 +80,7 @@ const deleteProduct = async (req, res) => {
   }
 }
 
-const getProductsIdsAndNames = async (req, res, next) => {
+const getProductsIdsAndNames = async (req, res) => {
   console.log("getProductsNamesById route");
   try {
     // Extract productIds from request body or query parameters
