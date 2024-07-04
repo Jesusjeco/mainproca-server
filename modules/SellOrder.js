@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const purchaseOrderSchema = new mongoose.Schema({
+const sellOrderSchema = new mongoose.Schema({
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client',
@@ -12,6 +12,11 @@ const purchaseOrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
         required: true
+      },
+      price: {
+        type: Number,
+        required: true,
+        min: [0, 'Price cannot be less than 0']
       },
       quantity: {
         type: Number,
@@ -31,6 +36,6 @@ const purchaseOrderSchema = new mongoose.Schema({
   }
 });
 
-const PurchaseOrder = mongoose.model('PurchaseOrder', purchaseOrderSchema);
+const SellOrder = mongoose.model('SellOrder', sellOrderSchema);
 
-module.exports = PurchaseOrder;
+module.exports = SellOrder;
