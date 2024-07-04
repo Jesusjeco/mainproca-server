@@ -2,7 +2,7 @@ const SellOrder = require('../modules/SellOrder');
 
 const getAllSellOrders = async (req, res, next) => {
   try {
-    const sellOrdersList = await SellOrder.find({}).sort({ name: 1 });
+    const sellOrdersList = await SellOrder.find({}).sort({ orderDate: -1 });
 
     res.status(200).json(sellOrdersList);
     //console.log(sellOrdersList);
