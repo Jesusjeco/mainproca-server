@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "nodemon ./bin/www",
     "start": "node ./bin/www",
-    "build": "npm install && echo 'Build complete.'"
+    "build": "npm install && echo 'Build complete.'",
+    "dev": "NODE_ENV=development nodemon ./bin/www",
+    "prod": "NODE_ENV=production nodemon ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
