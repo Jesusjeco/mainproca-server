@@ -6,6 +6,10 @@ const sellOrderSchema = new mongoose.Schema({
     ref: 'Client',
     required: true
   },
+  address:{
+    type: String,
+    required: true,
+  },
   products: [
     {
       product: {
