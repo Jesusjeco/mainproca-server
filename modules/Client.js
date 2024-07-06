@@ -13,6 +13,12 @@ const clientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  number: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
   //El campo de office se utiliza como "sucursales". Básicamente guarda multiples direcciones de una sola empresa
   offices: [
     { address: String, }
