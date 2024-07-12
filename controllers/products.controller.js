@@ -1,6 +1,6 @@
 const Product = require('../modules/Product');
 
-const getAllProducts = async (req,res) => {
+const getAllProducts = async (req, res) => {
   try {
     const productsList = await Product.find({}).sort({ name: 1 });
 
@@ -32,10 +32,11 @@ const getProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {// Create a new document
-    //const newProduct = new Product({ name: "Another Weesley333" });
-    const newProduct = new Product(req.body);
+    const { name, quantity, price, description } = req.body;
+    const newProduct = { name, quantity, price, description };
+    const product = new Product(newProduct);
     // Save the document
-    const savedProduct = await newProduct.save();
+    const savedProduct = await product.save();
 
     res.status(201).send('Test product name saved successfully');
   } catch (err) {
