@@ -32,10 +32,13 @@ const getClientById = async (req, res, next) => {
 
 const createClient = async (req, res) => {
   try {// Create a new document
-    //const newClient = new Client({ name: "Another Weesley333" });
-    const newClient = new Client(req.body);
+    const { rif, name, legal_address, offices, description, number, email } = req.body;
+    const newClient = {
+      rif, name, legal_address, offices, description, number, email
+    }
+    const client = new Client(newClient);
     // Save the document
-    const savedClient = await newClient.save();
+    const savedClient = await client.save();
 
     res.status(201).send('Test client name saved successfully');
   } catch (err) {
@@ -66,8 +69,6 @@ const updateClient = async function (req, res, next) {
 
 const deleteClient = async (req, res) => {
   const { id } = req.params;
-
-  console.log("Borrando cliente: " + id);
 
   try {
     const deletedClient = await Client.findByIdAndDelete(id);
