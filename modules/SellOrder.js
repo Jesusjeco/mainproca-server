@@ -20,7 +20,7 @@ const sellOrderSchema = new mongoose.Schema({
       price: {
         type: Number,
         required: true,
-        min: [0, 'Price cannot be less than 0']
+        min: [0.01, 'Price cannot be less than 0']
       },
       quantity: {
         type: Number,
