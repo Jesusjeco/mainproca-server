@@ -12,7 +12,7 @@ const sellOrderSchema = new mongoose.Schema({
   },
   products: [
     {
-      product: {
+      product_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
         required: true
@@ -26,6 +26,11 @@ const sellOrderSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: [1, 'Quantity cannot be less than 1']
+      },
+      totalPrice: {
+        type: Number,
+        required: true,
+        min: [0.01, 'totalPrice indicates 0??']
       }
     }
   ],
