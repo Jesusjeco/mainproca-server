@@ -6,13 +6,13 @@ const sellOrderSchema = new mongoose.Schema({
     ref: 'Client',
     required: true
   },
-  address:{
+  address: {
     type: String,
     required: true,
   },
   products: [
     {
-      product: {
+      product_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
         required: true
