@@ -31,18 +31,13 @@ const getSellOrderById = async (req, res, next) => {
 }
 
 const createSellOrder = async (req, res) => {
-  console.log("createSellOrder Route");
-
-  const { clientId, products, totalAmount } = req.body;
-  console.log('clientId:', clientId);
 
   try {// Create a new document
-    //const newSellOrder = new SellOrder({ name: "Another Weesley333" });
     const newSellOrder = new SellOrder(req.body);
     // Save the document
     const savedSellOrder = await newSellOrder.save();
 
-    res.status(201).send('Test sellOrder name saved successfully');
+    res.status(201).send('SellOrder name saved successfully');
   } catch (err) {
     console.error('Error saving document:', err);
     res.status(500).send('Error saving document');
