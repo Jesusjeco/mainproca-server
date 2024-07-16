@@ -32,6 +32,8 @@ const getSellOrderById = async (req, res, next) => {
 
 const createSellOrder = async (req, res) => {
 
+  //const { client_id, address, products, totalPrice, orderDate } = req.body;
+
   try {// Create a new document
     const newSellOrder = new SellOrder(req.body);
     // Save the document
