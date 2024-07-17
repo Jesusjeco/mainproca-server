@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const OrderCounter = require('../schemas/orderCounter');
+const OrderCounter = require('./orderCounter');
 
 const sellOrderSchema = new mongoose.Schema({
   orderNumber: {
