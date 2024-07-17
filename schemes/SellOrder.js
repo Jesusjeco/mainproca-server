@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
+const OrderCounter = require('./orderCounter');
 
 const sellOrderSchema = new mongoose.Schema({
+  orderNumber: {
+    type: String,
+    unique: true
+  },
   client_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client',
@@ -37,6 +42,27 @@ const sellOrderSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: [0, 'Total amount cannot be less than 0']
+  }
+});
+
+sellOrderSchema.pre('save', async function (next) {
+  const order = this;
+  const currentDate = new Date();
+  const dateString = `${String(currentDate.getDate()).padStart(2, '0')}${String(currentDate.getMonth() + 1).padStart(2, '0')}${String(currentDate.getFullYear()).slice(-2)}`;
+
+  try {
+    // Find and update the order counter for the current date
+    const counter = await OrderCounter.findOneAndUpdate(
+      { date: dateString },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    const orderNumber = `${dateString}-${counter.seq}`;
+    order.orderNumber = orderNumber;
+    next();
+  } catch (error) {
+    next(error);
   }
 });
 
