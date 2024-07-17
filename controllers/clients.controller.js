@@ -1,4 +1,4 @@
-const Client = require('../modules/Client');
+const Client = require('../schemas/Client');
 
 const getAllClients = async (req, res, next) => {
   try {

@@ -1,4 +1,4 @@
-const SellOrder = require('../modules/SellOrder');
+const SellOrder = require('../schemas/SellOrder');
 
 const getAllSellOrders = async (req, res, next) => {
   try {
