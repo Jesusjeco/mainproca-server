@@ -39,8 +39,7 @@ const createClient = async (req, res) => {
     const client = new Client(newClient);
     // Save the document
     const savedClient = await client.save();
-
-    res.status(201).send('Test client name saved successfully');
+    res.status(201).send(savedClient);
   } catch (err) {
     console.error('Error saving document:', err);
     res.status(500).send('Error saving document');
@@ -76,8 +75,7 @@ const deleteClient = async (req, res) => {
     if (!deletedClient) {
       return res.status(404).send('Client not found');
     }
-
-    res.send(`Client with ID ${id} has been deleted`);
+    res.status(200).send(deletedClient);
   } catch (err) {
     console.error('Error deleting client:', err);
     res.status(500).send('Error deleting client');
