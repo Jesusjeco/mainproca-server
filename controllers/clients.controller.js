@@ -5,7 +5,6 @@ const getAllClients = async (req, res, next) => {
     const clientsList = await Client.find({}).sort({ name: 1 });
 
     res.status(200).json(clientsList);
-    //console.log(clientsList);
   } catch (err) {
     console.error('Error fetching clients:', err);
     res.status(500).send('Error fetching clients');
@@ -18,7 +17,7 @@ const getClientById = async (req, res, next) => {
 
     if (!clientById) {
       // If no client is found, send a 404 status and error message
-      console.log("Error 404 detected");
+      console.log("Error 404 detected in getClientById");
       return res.status(404).json({ error: 'Client not found' });
     }
 
@@ -49,7 +48,6 @@ const createClient = async (req, res) => {
 const updateClient = async function (req, res, next) {
   try {
     const { id } = req.params;
-    console.log("Updating client: " + id);
 
     const clientToupdate = await Client.findByIdAndUpdate(id, req.body);
     if (!clientToupdate) {
