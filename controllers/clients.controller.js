@@ -49,20 +49,19 @@ const updateClient = async function (req, res, next) {
   try {
     const { id } = req.params;
 
-    const clientToupdate = await Client.findByIdAndUpdate(id, req.body);
-    if (!clientToupdate) {
-      res.status(404).send('Document not found by ID');
+    // Validate the input data here if necessary
+    const updatedClient = await Client.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedClient) {
+      return res.status(404).send('Document not found by ID');
     }
 
-    const updatedClient = await Client.findById(id);
-    //res.status(200).send('Client updated... I guess?');
     res.status(200).send(updatedClient);
-
   } catch (err) {
     console.error('Error updating document:', err);
     res.status(500).send('Error updating document');
   }
-}
+};
+
 
 const deleteClient = async (req, res) => {
   const { id } = req.params;
