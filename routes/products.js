@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct, getProductsIdsAndNames } = require('../controllers/products.controller');
+const { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } = require('../controllers/products.controller');
 
 /* ******************
  * Get routes
@@ -22,10 +22,5 @@ router.put('/:id', updateProduct);
  * Delete routes
  * ******************/
 router.delete('/:id', deleteProduct);
-
-/********************
- * Custom routes
- ********************/
-router.post('/IdsAndNames', getProductsIdsAndNames);
 
 module.exports = router;
