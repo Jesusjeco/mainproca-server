@@ -33,8 +33,7 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {// Create a new document
     const { name, quantity, price, description } = req.body;
-    const newProduct = { name, quantity, price, description };
-    const product = new Product(newProduct);
+    const product = new Product({ name, quantity, price, description });
     // Save the document
     const savedProduct = await product.save();
     res.status(201).send(savedProduct);
