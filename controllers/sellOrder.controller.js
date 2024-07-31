@@ -36,10 +36,10 @@ const createSellOrder = async (req, res) => {
 
   try {// Create a new document
     const newSellOrder = new SellOrder({ client_id, address, products, totalPrice, orderDate });
+
     // Save the document
     const savedSellOrder = await newSellOrder.save();
-
-    res.status(201).send('SellOrder name saved successfully');
+    res.status(201).send(savedSellOrder);
   } catch (err) {
     console.error('Error saving document:', err);
     res.status(500).send('Error saving document');
@@ -50,15 +50,12 @@ const updateSellOrder = async function (req, res, next) {
   try {
     const { id } = req.params;
 
-    const sellOrderToupdate = await SellOrder.findByIdAndUpdate(id, req.body);
-    if (!sellOrderToupdate) {
+    const sellOrderUpdated = await SellOrder.findByIdAndUpdate(id, req.body, { new: true });
+    if (!sellOrderUpdated) {
       res.status(404).send('Document not found by ID');
     }
 
-    const updatedSellOrder = await SellOrder.findById(id);
-    //res.status(200).send('SellOrder updated... I guess?');
-    res.status(200).send(updatedSellOrder);
-
+    res.status(200).send(sellOrderUpdated);
   } catch (err) {
     console.error('Error updating document:', err);
     res.status(500).send('Error updating document');
@@ -75,7 +72,7 @@ const deleteSellOrder = async (req, res) => {
       return res.status(404).send('SellOrder not found');
     }
 
-    res.send(`SellOrder with ID ${id} has been deleted`);
+    res.send(deletedSellOrder);
   } catch (err) {
     console.error('Error deleting sellOrder:', err);
     res.status(500).send('Error deleting sellOrder');

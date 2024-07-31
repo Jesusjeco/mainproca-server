@@ -32,10 +32,7 @@ const getClientById = async (req, res, next) => {
 const createClient = async (req, res) => {
   try {// Create a new document
     const { rif, name, legal_address, offices, description, number, email } = req.body;
-    const newClient = {
-      rif, name, legal_address, offices, description, number, email
-    }
-    const client = new Client(newClient);
+    const client = new Client({ rif, name, legal_address, offices, description, number, email });
     // Save the document
     const savedClient = await client.save();
     res.status(201).send(savedClient);
