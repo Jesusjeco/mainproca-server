@@ -1,3 +1,4 @@
+const Product = require('../schemes/Product');
 const SellOrder = require('../schemes/SellOrder');
 
 const getAllSellOrders = async (req, res, next) => {
@@ -5,67 +6,127 @@ const getAllSellOrders = async (req, res, next) => {
     const sellOrdersList = await SellOrder.find({}).sort({ orderDate: -1 });
 
     res.status(200).json(sellOrdersList);
-    //console.log(sellOrdersList);
   } catch (err) {
     console.error('Error fetching sellOrders:', err);
     res.status(500).send('Error fetching sellOrders');
   }
-}//getAllSellOrders
+};
 
 const getSellOrderById = async (req, res, next) => {
   try {
     const sellOrderById = await SellOrder.findById(req.params.id);
 
     if (!sellOrderById) {
-      // If no sellOrder is found, send a 404 status and error message
-      console.log("Error 404 detected");
       return res.status(404).json({ error: 'SellOrder not found' });
     }
 
     res.status(200).json(sellOrderById);
-    //console.log(sellOrderById);
   } catch (err) {
     console.error('Error fetching sellOrder by ID:', err);
     res.status(500).send('Error fetching sellOrder by ID');
   }
-}
+};
 
 const createSellOrder = async (req, res) => {
-
   const { client_id, address, products, totalPrice, orderDate } = req.body;
 
-  try {// Create a new document
-    const newSellOrder = new SellOrder({ client_id, address, products, totalPrice, orderDate });
+  try {
+    // Validate product quantities
+    for (const { product_id, quantity } of products) {
+      const product = await Product.findById(product_id);
+      if (!product || product.quantity < quantity) {
+        return res.status(400).json({ error: 'Insufficient inventory for product: ' + product_id });
+      }
+    }
 
-    // Save the document
+    // Create sell order
+    const newSellOrder = new SellOrder({ client_id, address, products, totalPrice, orderDate });
     const savedSellOrder = await newSellOrder.save();
+
+    // Update product quantities
+    for (const { product_id, quantity } of products) {
+      await Product.findByIdAndUpdate(product_id, { $inc: { quantity: -quantity } });
+    }
+
     res.status(201).send(savedSellOrder);
   } catch (err) {
     console.error('Error saving document:', err);
     res.status(500).send('Error saving document');
   }
-}
+};
 
-const updateSellOrder = async function (req, res, next) {
+const updateSellOrder = async (req, res) => {
+  const { id } = req.params;
+  const { client_id, address, products, totalPrice, orderDate } = req.body;
+
   try {
-    const { id } = req.params;
-
-    const sellOrderUpdated = await SellOrder.findByIdAndUpdate(id, req.body, { new: true });
-    if (!sellOrderUpdated) {
-      res.status(404).send('Document not found by ID');
+    // Fetch the existing sell order
+    const existingOrder = await SellOrder.findById(id);
+    if (!existingOrder) {
+      return res.status(404).json({ error: 'SellOrder not found' });
     }
 
-    res.status(200).send(sellOrderUpdated);
+    // Calculate the difference in product quantities
+    const productDifferences = {};
+
+    // Reduce quantities based on existing order
+    for (const { product_id, quantity } of existingOrder.products) {
+      if (!productDifferences[product_id]) {
+        productDifferences[product_id] = 0;
+      }
+      productDifferences[product_id] -= quantity;
+    }
+
+    // Add quantities based on updated order
+    for (const { product_id, quantity } of products) {
+      if (!productDifferences[product_id]) {
+        productDifferences[product_id] = 0;
+      }
+      productDifferences[product_id] += quantity;
+    }
+
+    // Update the inventory
+    for (const product_id in productDifferences) {
+      const difference = productDifferences[product_id];
+      const product = await Product.findById(product_id);
+      if (!product || product.quantity + difference < 0) {
+        return res.status(400).json({ error: 'Insufficient inventory for product: ' + product_id });
+      }
+      await Product.findByIdAndUpdate(product_id, { $inc: { quantity: -difference } });
+    }
+
+    // Update the sell order
+    const updatedOrder = await SellOrder.findByIdAndUpdate(id, {
+      client_id,
+      address,
+      products,
+      totalPrice,
+      orderDate,
+    }, { new: true });
+
+    res.status(200).send(updatedOrder);
   } catch (err) {
-    console.error('Error updating document:', err);
-    res.status(500).send('Error updating document');
+    console.error('Error updating sell order:', err);
+    res.status(500).send('Error updating sell order');
   }
-}
+};
 
 const deleteSellOrder = async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Fetch the existing sell order
+    const existingOrder = await SellOrder.findById(id);
+    if (!existingOrder) {
+      return res.status(404).json({ error: 'SellOrder not found' });
+    }
+
+    // Restore the product quantities
+    for (const { product_id, quantity } of existingOrder.products) {
+      await Product.findByIdAndUpdate(product_id, { $inc: { quantity: quantity } });
+    }
+
+    // Delete the sell order
     const deletedSellOrder = await SellOrder.findByIdAndDelete(id);
 
     if (!deletedSellOrder) {
@@ -77,8 +138,12 @@ const deleteSellOrder = async (req, res) => {
     console.error('Error deleting sellOrder:', err);
     res.status(500).send('Error deleting sellOrder');
   }
-}
+};
 
 module.exports = {
-  getAllSellOrders, getSellOrderById, createSellOrder, updateSellOrder, deleteSellOrder
-}
+  getAllSellOrders,
+  getSellOrderById,
+  createSellOrder,
+  updateSellOrder,
+  deleteSellOrder
+};
