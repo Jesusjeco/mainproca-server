@@ -10,7 +10,7 @@ const getAllSellOrders = async (req, res, next) => {
     console.error('Error fetching sellOrders:', err);
     res.status(500).send('Error fetching sellOrders');
   }
-};
+}//getAllSellOrders
 
 const getSellOrderById = async (req, res, next) => {
   try {
@@ -25,7 +25,7 @@ const getSellOrderById = async (req, res, next) => {
     console.error('Error fetching sellOrder by ID:', err);
     res.status(500).send('Error fetching sellOrder by ID');
   }
-};
+}//getSellOrderById
 
 const createSellOrder = async (req, res) => {
   const { client_id, address, products, totalPrice, orderDate } = req.body;
@@ -53,7 +53,7 @@ const createSellOrder = async (req, res) => {
     console.error('Error saving document:', err);
     res.status(500).send('Error saving document');
   }
-};
+}//createSellOrder
 
 const updateSellOrder = async (req, res) => {
   const { id } = req.params;
@@ -109,7 +109,7 @@ const updateSellOrder = async (req, res) => {
     console.error('Error updating sell order:', err);
     res.status(500).send('Error updating sell order');
   }
-};
+}//updateSellOrder
 
 const deleteSellOrder = async (req, res) => {
   const { id } = req.params;
@@ -138,7 +138,7 @@ const deleteSellOrder = async (req, res) => {
     console.error('Error deleting sellOrder:', err);
     res.status(500).send('Error deleting sellOrder');
   }
-};
+}//deleteSellOrder
 
 module.exports = {
   getAllSellOrders,
