@@ -28,7 +28,7 @@ const getSellOrderById = async (req, res, next) => {
 }//getSellOrderById
 
 const createSellOrder = async (req, res) => {
-  const { client_id, address, products, totalPrice, orderDate } = req.body;
+  const { client_id, orderDate, address, products, subTotal, total } = req.body;
 
   try {
     // Validate product quantities
@@ -40,7 +40,7 @@ const createSellOrder = async (req, res) => {
     }
 
     // Create sell order
-    const newSellOrder = new SellOrder({ client_id, address, products, totalPrice, orderDate });
+    const newSellOrder = new SellOrder({ client_id, orderDate, address, products, subTotal, total } );
     const savedSellOrder = await newSellOrder.save();
 
     // Update product quantities
@@ -57,7 +57,7 @@ const createSellOrder = async (req, res) => {
 
 const updateSellOrder = async (req, res) => {
   const { id } = req.params;
-  const { client_id, address, products, totalPrice, orderDate } = req.body;
+  const { client_id, orderDate, address, products, subTotal, total }  = req.body;
 
   try {
     // Fetch the existing sell order
@@ -96,13 +96,7 @@ const updateSellOrder = async (req, res) => {
     }
 
     // Update the sell order
-    const updatedOrder = await SellOrder.findByIdAndUpdate(id, {
-      client_id,
-      address,
-      products,
-      totalPrice,
-      orderDate,
-    }, { new: true });
+    const updatedOrder = await SellOrder.findByIdAndUpdate(id, { client_id, orderDate, address, products, subTotal, total } , { new: true });
 
     res.status(200).send(updatedOrder);
   } catch (err) {
