@@ -38,7 +38,12 @@ const sellOrderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  totalPrice: {
+  subTotal: {
+    type: Number,
+    required: true,
+    min: [0, 'Sub total cannot be less than 0']
+  },
+  total: {
     type: Number,
     required: true,
     min: [0, 'Total amount cannot be less than 0']
