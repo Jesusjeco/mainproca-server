@@ -34,13 +34,13 @@ const createSellOrder = async (req, res) => {
     // Validate product quantities
     for (const { product_id, quantity } of products) {
       const product = await Product.findById(product_id);
-      if (!product || product.quantity < quantity) {
-        return res.status(400).json({ error: 'Insufficient inventory for product: ' + product_id });
+      if (!product) {
+        return res.status(400).json({ error: 'Product not found using productID: ' + product_id });
       }
     }
 
     // Create sell order
-    const newSellOrder = new SellOrder({ client_id, orderDate, address, products, subTotal, total } );
+    const newSellOrder = new SellOrder({ client_id, orderDate, address, products, subTotal, total });
     const savedSellOrder = await newSellOrder.save();
 
     // Update product quantities
@@ -57,7 +57,7 @@ const createSellOrder = async (req, res) => {
 
 const updateSellOrder = async (req, res) => {
   const { id } = req.params;
-  const { client_id, orderDate, address, products, subTotal, total }  = req.body;
+  const { client_id, orderDate, address, products, subTotal, total } = req.body;
 
   try {
     // Fetch the existing sell order
@@ -89,14 +89,14 @@ const updateSellOrder = async (req, res) => {
     for (const product_id in productDifferences) {
       const difference = productDifferences[product_id];
       const product = await Product.findById(product_id);
-      if (!product || product.quantity + difference < 0) {
-        return res.status(400).json({ error: 'Insufficient inventory for product: ' + product_id });
+      if (!product) {
+        return res.status(400).json({ error: 'Product not found using productID: ' + product_id });
       }
       await Product.findByIdAndUpdate(product_id, { $inc: { quantity: -difference } });
     }
 
     // Update the sell order
-    const updatedOrder = await SellOrder.findByIdAndUpdate(id, { client_id, orderDate, address, products, subTotal, total } , { new: true });
+    const updatedOrder = await SellOrder.findByIdAndUpdate(id, { client_id, orderDate, address, products, subTotal, total }, { new: true });
 
     res.status(200).send(updatedOrder);
   } catch (err) {
