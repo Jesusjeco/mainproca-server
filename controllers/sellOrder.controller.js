@@ -2,15 +2,30 @@ const Product = require('../schemes/Product');
 const SellOrder = require('../schemes/SellOrder');
 
 const getAllSellOrders = async (req, res, next) => {
-  try {
-    const sellOrdersList = await SellOrder.find({}).sort({ orderDate: -1 });
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
 
-    res.status(200).json(sellOrdersList);
+  try {
+    const sellOrdersList = await SellOrder.find({})
+      .sort({ orderDate: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalSellOrders = await SellOrder.countDocuments({});
+    const totalPages = Math.ceil(totalSellOrders / limit);
+
+    res.status(200).json({
+      sellOrders: sellOrdersList,
+      totalPages,
+      currentPage: page
+    });
   } catch (err) {
     console.error('Error fetching sellOrders:', err);
     res.status(500).send('Error fetching sellOrders');
   }
-}//getAllSellOrders
+};
+
 
 const getSellOrderById = async (req, res, next) => {
   try {
