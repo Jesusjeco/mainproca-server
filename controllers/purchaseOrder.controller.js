@@ -43,7 +43,7 @@ const getPurchaseOrderById = async (req, res, next) => {
 }//getPurchaseOrderById
 
 const createPurchaseOrder = async (req, res) => {
-  const { orderNumber, client_id, orderDate, productsOrder } = req.body;
+  const { orderNumber, client_id, orderDate, productsOrder, description } = req.body;
 
   try {
     // Validate product exists
@@ -55,7 +55,7 @@ const createPurchaseOrder = async (req, res) => {
     }
 
     // Create purchase order
-    const newPurchaseOrder = new PurchaseOrder({ orderNumber, client_id, orderDate, productsOrder });
+    const newPurchaseOrder = new PurchaseOrder({ orderNumber, client_id, orderDate, productsOrder, description });
     const savedPurchaseOrder = await newPurchaseOrder.save();
 
     // Update product quantities
@@ -72,7 +72,7 @@ const createPurchaseOrder = async (req, res) => {
 
 const updatePurchaseOrder = async (req, res) => {
   const { id } = req.params;
-  const { orderNumber, client_id, orderDate, productsOrder } = req.body;
+  const { orderNumber, client_id, orderDate, productsOrder, description } = req.body;
 
   try {
     // Fetch the existing purchase order
@@ -111,7 +111,7 @@ const updatePurchaseOrder = async (req, res) => {
     }
 
     // Update the sell order
-    const updatedOrder = await PurchaseOrder.findByIdAndUpdate(id, { orderNumber, client_id, orderDate, productsOrder }, { new: true });
+    const updatedOrder = await PurchaseOrder.findByIdAndUpdate(id, { orderNumber, client_id, orderDate, productsOrder, description }, { new: true });
 
     res.status(200).send(updatedOrder);
   } catch (err) {
