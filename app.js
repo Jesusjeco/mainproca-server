@@ -8,6 +8,7 @@ var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products');
 var clientsRouter = require('./routes/clients');
 var sellOrder = require("./routes/sellOrder");
+var purchaseOrder = require("./routes/purchaseOrder");
 var mongooseRouter = require("./routes/mongoose");
 
 //Using cors to avois CORS restrictions during an API call
@@ -34,6 +35,7 @@ app.use('/users', usersRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/clients', clientsRouter);
 app.use("/api/sellOrder", sellOrder);
+app.use("/api/purchaseOrder", purchaseOrder);
 app.use('/api/mongoose', mongooseRouter);
 
 module.exports = app;
