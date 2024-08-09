@@ -33,6 +33,9 @@ const purchaseOrderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  description: {
+    type: String,
+  }
 });
 
 const PurchaseOrder = mongoose.model('PurchaseOrder', purchaseOrderSchema);
