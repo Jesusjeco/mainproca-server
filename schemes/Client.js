@@ -4,6 +4,7 @@ const clientSchema = new mongoose.Schema({
   rif: {
     type: String,
     required: true,
+    unique: true
   },
   legal_address: {
     type: String,
