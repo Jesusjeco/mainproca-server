@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getAllSellOrders, getSellOrderById, createSellOrder, updateSellOrder, deleteSellOrder } = require('../controllers/sellOrder.controller');
+const { getAllSellOrders, getSellOrderById, createSellOrder, updateSellOrder, deleteSellOrder, getSellOrderByProductId } = require('../controllers/sellOrder.controller');
 
 /* ******************
  * Get routes
@@ -22,5 +22,10 @@ router.put('/:id', updateSellOrder);
  * Delete routes
  * ******************/
 router.delete('/:id', deleteSellOrder);
+
+/********************
+ * Get sell order based on the product Id 
+ */
+router.get('/product/:productId', getSellOrderByProductId); 
 
 module.exports = router;
