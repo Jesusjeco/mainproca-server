@@ -27,7 +27,7 @@ const clientSchema = new mongoose.Schema({
   description: {
     type: String,
   }
-});
+}, { timestamps: true });
 
 const Client = mongoose.model('Client', clientSchema);
 
