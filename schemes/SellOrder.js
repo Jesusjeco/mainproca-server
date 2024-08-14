@@ -48,7 +48,7 @@ const sellOrderSchema = new mongoose.Schema({
     required: true,
     min: [0, 'Total amount cannot be less than 0']
   }
-});
+}, { timestamps: true });
 
 sellOrderSchema.pre('save', async function (next) {
   const order = this;

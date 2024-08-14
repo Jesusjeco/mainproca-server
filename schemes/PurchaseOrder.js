@@ -36,7 +36,7 @@ const purchaseOrderSchema = new mongoose.Schema({
   description: {
     type: String,
   }
-});
+}, { timestamps: true });
 
 const PurchaseOrder = mongoose.model('PurchaseOrder', purchaseOrderSchema);
 
