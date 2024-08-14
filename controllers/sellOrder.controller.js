@@ -149,10 +149,30 @@ const deleteSellOrder = async (req, res) => {
   }
 }//deleteSellOrder
 
+// Function to get SellOrders by product ID
+const getSellOrderByProductId = async (req, res) => {
+  const { productId } = req.params;
+  console.log("Llega");
+  console.log("productId", productId);
+
+
+  try {
+    const sellOrdersList = await SellOrder.find({ 'products.product_id': productId })
+      .sort({ orderDate: -1 })
+      .limit(5);
+
+    res.status(200).json(sellOrdersList);
+  } catch (err) {
+    console.error('Error fetching sell orders by product ID:', err);
+    res.status(500).send('Error fetching sell orders by product ID');
+  }
+};
+
 module.exports = {
   getAllSellOrders,
   getSellOrderById,
   createSellOrder,
   updateSellOrder,
-  deleteSellOrder
+  deleteSellOrder,
+  getSellOrderByProductId
 };
