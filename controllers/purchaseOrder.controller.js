@@ -24,8 +24,7 @@ const getAllPurchaseOrders = async (req, res, next) => {
     console.error('Error fetching purchaseOrders:', err);
     res.status(500).send('Error fetching purchaseOrders');
   }
-};
-
+}
 
 const getPurchaseOrderById = async (req, res, next) => {
   try {
@@ -149,10 +148,44 @@ const deletePurchaseOrder = async (req, res) => {
   }
 }//deletePurchaseOrder
 
+// Function to get PurchaseOrders by product ID
+const getPurchaseOrderByProductId = async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    const purchaseOrdersList = await PurchaseOrder.find({ 'productsOrder.product_id': productId })
+      .sort({ orderDate: -1 })
+      .limit(5);
+
+    res.status(200).json(purchaseOrdersList);
+  } catch (err) {
+    console.error('Error fetching purchase order by product ID:', err);
+    res.status(500).send('Error fetching purchase order by product ID');
+  }
+}
+
+// Function to get PurchaseOrders by client ID
+const getPurchaseOrderByClientId = async (req, res) => {
+  const { clientId } = req.params;
+
+  try {
+    const purchaseOrdersList = await PurchaseOrder.find({ 'client_id': clientId })
+      .sort({ orderDate: -1 })
+      .limit(5);
+
+    res.status(200).json(purchaseOrdersList);
+  } catch (err) {
+    console.error('Error fetching purchase order by product ID:', err);
+    res.status(500).send('Error fetching purchase order by product ID');
+  }
+}
+
 module.exports = {
   getAllPurchaseOrders,
   getPurchaseOrderById,
   createPurchaseOrder,
   updatePurchaseOrder,
-  deletePurchaseOrder
+  deletePurchaseOrder,
+  getPurchaseOrderByProductId,
+  getPurchaseOrderByClientId
 };
