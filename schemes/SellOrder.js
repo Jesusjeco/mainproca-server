@@ -47,6 +47,9 @@ const sellOrderSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: [0, 'Total amount cannot be less than 0']
+  },
+  description: {
+    type: String,
   }
 }, { timestamps: true });
 
