@@ -43,7 +43,7 @@ const getSellOrderById = async (req, res, next) => {
 }//getSellOrderById
 
 const createSellOrder = async (req, res) => {
-  const { client_id, orderDate, address, products, subTotal, total } = req.body;
+  const { client_id, orderDate, address, products, subTotal, total, description } = req.body;
 
   try {
     // Validate product quantities
@@ -55,7 +55,7 @@ const createSellOrder = async (req, res) => {
     }
 
     // Create sell order
-    const newSellOrder = new SellOrder({ client_id, orderDate, address, products, subTotal, total });
+    const newSellOrder = new SellOrder({ client_id, orderDate, address, products, subTotal, total, description });
     const savedSellOrder = await newSellOrder.save();
 
     // Update product quantities
@@ -72,7 +72,7 @@ const createSellOrder = async (req, res) => {
 
 const updateSellOrder = async (req, res) => {
   const { id } = req.params;
-  const { client_id, orderDate, address, products, subTotal, total } = req.body;
+  const { client_id, orderDate, address, products, subTotal, total, description } = req.body;
 
   try {
     // Fetch the existing sell order
@@ -111,7 +111,7 @@ const updateSellOrder = async (req, res) => {
     }
 
     // Update the sell order
-    const updatedOrder = await SellOrder.findByIdAndUpdate(id, { client_id, orderDate, address, products, subTotal, total }, { new: true });
+    const updatedOrder = await SellOrder.findByIdAndUpdate(id, { client_id, orderDate, address, products, subTotal, total, description }, { new: true });
 
     res.status(200).send(updatedOrder);
   } catch (err) {
@@ -168,7 +168,7 @@ const getSellOrderByProductId = async (req, res) => {
 // Function to get SellOrders by client ID
 const getSellOrderByClientId = async (req, res) => {
   const { clientId } = req.params;
-  
+
   try {
     const sellOrdersList = await SellOrder.find({ 'client_id': clientId })
       .sort({ orderDate: -1 })
@@ -180,7 +180,7 @@ const getSellOrderByClientId = async (req, res) => {
     res.status(500).send('Error fetching sell orders by product ID');
   }
 };
- 
+
 module.exports = {
   getAllSellOrders,
   getSellOrderById,
