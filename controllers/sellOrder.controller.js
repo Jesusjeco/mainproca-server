@@ -152,13 +152,25 @@ const deleteSellOrder = async (req, res) => {
 // Function to get SellOrders by product ID
 const getSellOrderByProductId = async (req, res) => {
   const { productId } = req.params;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
+  const skip = (page - 1) * limit;
 
   try {
     const sellOrdersList = await SellOrder.find({ 'products.product_id': productId })
       .sort({ orderDate: -1 })
-      .limit(5);
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json(sellOrdersList);
+    const totalSellOrders = await SellOrder.countDocuments({ 'products.product_id': productId });
+    const totalPages = Math.ceil(totalSellOrders / limit);
+
+    res.status(200).json({
+      sellOrders: sellOrdersList,
+      totalPages,
+      currentPage: page,
+      totalSellOrders
+    });
   } catch (err) {
     console.error('Error fetching sell orders by product ID:', err);
     res.status(500).send('Error fetching sell orders by product ID');
